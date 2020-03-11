@@ -6,7 +6,7 @@ public class Nodo <T> {
 
 	private T actual;
 
-	private Nodo siguiente;
+	private Nodo<T> siguiente;
 
 	public Nodo(T dato)
 	{
@@ -29,6 +29,10 @@ public class Nodo <T> {
 	public void setSiguiente(Nodo siguiente) {
 		this.siguiente = siguiente;
 	}
+
+	
+	
+	
 
 
 }
