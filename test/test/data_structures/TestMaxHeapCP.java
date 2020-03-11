@@ -1,47 +1,48 @@
 package test.data_structures;
-import model.data_structures.*;
-import static org.junit.Assert.*;
 
-import org.junit.Before;
-import org.junit.Test;
-import java.util.Comparator;
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+
+import model.data_structures.MaxHeapCP;
+
 
 public class TestMaxHeapCP {
 	
-	private MaxHeapCP heaps;
-	private Nodo primero;
-	private Nodo ultimo;
-	
-	public void setUp1() {
-		cola = new Cola<T>();
-		primero = (Nodo) cola.darPrimero();
-		ultimo = (Nodo) cola.darUltimo();
+	public void crearHeap()
+	{
+		ArrayList<Integer> a = new ArrayList<>();
+		a.add(25);
+		a.add(10);
+		a.add(30);
+		a.add(35);
+		a.add(40);
+		
+		Integer[] esperado = new Integer[11];
+		esperado[1] = 40;
+		esperado[2] = 35;
+		esperado[3] = 30;
+		esperado[4] = 25;
+		esperado[5] = 10;
+		
+		MaxHeapCP<Integer> b = new MaxHeapCP<Integer>(a.size());
+		assertEquals(5, b.darNumElementos());
 	}
+	
+	public void testOrganizado()
+	{
+		crearHeap();
+		
+		
+	}
+		
+	
+		
+		
+		
+	}
+	
 
-	public void setUp2() {
-		Integer a = new Integer (1);
-		cola.enqueue(a);
-	}
-
-	public void testCola(){
-		
-		setUp1();
-		setUp2();
-		String elemento = "";
-		Integer elemento2 = new Integer(1);
-		Nodo a = new Nodo(elemento2);
-		
-	
-		assertEquals(primero,cola.darPrimero());
-		assertEquals(ultimo,cola.darUltimo());
-		assertEquals("", cola.enqueue(elemento));
-		assertTrue(cola.dequeue() == a);
-		
-		
-		
-	}
-	
-}
 
 
 

@@ -15,8 +15,9 @@ import com.google.gson.stream.JsonReader;
 import com.sun.corba.se.impl.orbutil.RepositoryIdUtility;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
-import model.data_structures.Cola;
 import model.data_structures.Comparendo;
+import model.data_structures.MaxColaCP;
+import model.data_structures.MaxHeapCP;
 import model.data_structures.Nodo;
 
 
@@ -27,44 +28,57 @@ import model.data_structures.Nodo;
 public class Modelo <T> {
 
 	public static String PATH = "./data/comparendos_dei_2018_small.geojson"; 
-
-	private Cola<Comparendo> cola;
+	
+	private ArrayList<Comparendo> arreglo;
 
 
 	public Modelo()
 	{
-		cola = new Cola<Comparendo>();
+		maxCola = new MaxColaCP();
+		maxHeap = new MaxHeapCP(0);
+		arreglo = new ArrayList<Comparendo>();
 	}
 
-	public int darTamano()
+	public int darNumElementos()
 	{
-		return cola.darTamano();
+		return maxCola.darNumElementos();
 	}
 
-	public void enqueue(Comparendo dato)
+	public void agregar(Comparendo dato)
 	{	
-		cola.enqueue(dato);
+		maxCola.agregar(dato);
 	}
 
 	public Comparendo darPrimero()
 	{
-		return cola.darPrimero().getActual();
+		return maxCola.darPrimero().getActual();
 	}
 
 	public Comparendo darUltimo()
 	{
-		return cola.darUltimo().getActual();
+		return maxCola.darUltimo().getActual();
 	}
-
-	public Nodo<Comparendo> dequeue()
+	
+	public Comparendo sacarMax()
 	{
-		return cola.dequeue();
+		return maxCola.sacarMax();
 	}
-
+	
+	public Comparendo darMax()
+	{
+		return maxCola.darMax();
+	}
+	
+	public boolean esVacia()
+	{
+		return maxCola.esVacia();
+	}
+	
 
 	public void cargarDatos() {
 		
-		if(cola.esVacio()){
+		
+		if(maxCola.esVacia()){
 			JsonReader reader;
 			try {
 				reader = new JsonReader(new FileReader(PATH));
@@ -94,12 +108,9 @@ public class Modelo <T> {
 					c.latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
 							.get(1).getAsDouble();
 
-					enqueue(c);
-		
-
+					arreglo.add(c);
+	
 				}
-
-
 			} catch (FileNotFoundException | ParseException e) {
 				e.printStackTrace();
 			}
@@ -108,140 +119,18 @@ public class Modelo <T> {
 			System.out.println("---");
 	}
 	
-	public Comparable[] copiarComparendos()
+	public void generarMuestraCola(int n)
 	{
-		Comparable<Comparendo>[] copiaComp = new Comparable[cola.darTamano()];
-		Nodo<Comparendo> x = null;
-		
-		for(int i = 0; i < cola.darTamano(); i++)
+		MaxColaCP copiaComp = new MaxColaCP();
+		int[] numeros = new int[n];
+		for (int i = 0; i < numeros.length; i++) 
 		{
-			x = cola.darPrimero();
-			copiaComp[i] =x.getActual();
-			x = x.getSiguiente();
-		}
-		return copiaComp;		
-				
-	}
-	
-	
-	public void shellSort(Comparable datos[])
-	{
-		datos = copiarComparendos();
-		int a = datos.length;
-		Comparable aux;
-		boolean cond;
-		 while(a > 0)
-		 {
-			 a = a/2;
-			 cond = true;
-			 
-			 while(cond)
-			 {
-				 cond = false;
-				 int i = 0;
-				 
-				 while((i + a) <= datos.length-1)
-				 {
-					 if(datos[i].compareTo(datos[i+a]) == 1 ) 
-					 {
-						 aux = datos[i];
-						 datos[i] = datos[i+a];
-						 datos[i+a] = aux;
-						 cond = true;
-						 
-					 }
-					 
-					 i = i + 1;
-				 }
-			 }
-		}
-   }
-	
-	public static void mergeSort(Comparable[] arreglo)
-	{
-		Comparable[] aux = new Comparable[arreglo.length];
-		merge(arreglo, aux, 0, arreglo.length);
-		
-	}
-	
-	public static void merge(Comparable[] d, Comparable[] aux, int lo, int hi)
-	{
-		
-		if(lo>= hi)
-		{
-			return;
+			numeros[i] = (int) Math.random();
 		}
 		
-		int mid = (lo+hi)/2;
-		merge(d,aux,lo,mid);
-		merge(d,aux,mid+1,hi);
-		mergeHalves(d, aux, lo,hi);
-		
-	}
-	
-	public static void mergeHalves(Comparable[] d, Comparable[] aux, int lo, int hi)
-	{
-		 	int leftEnd = (hi + lo) / 2;
-	        int rightStart = leftEnd + 1;
-	        int size = hi - lo + 1;
-
-	        int left = lo;
-	        int right = rightStart;
-	        int index = lo;
-
-	        while (left <= leftEnd && right <= hi) {
-
-	            if (d[left].compareTo(d[right]) == -1) {
-	                aux[index] = d[left];
-	                left++;
-	            } else {
-	                aux[index] = d[right];
-	                right++;
-
-	            }
-	            index++;
-	        }
-	}
-	
-	
-	public static long quick_srt(Comparable arreglo[],int low, int n){
-	      long startTime = System.currentTimeMillis();
-		int lo = low;
-	      int hi = n;
-	      if (lo >= n) {
-	          return startTime;
-	      }
-	      int mid = (lo + hi) / 2;
-	      while (lo < hi) {
-	          while (lo<hi && arreglo[lo].compareTo(mid) < 0) {
-	              lo++;
-	          }
-	          while (lo<hi && arreglo[hi].compareTo(mid) > 0) {
-	              hi--; }
-	          if (lo < hi) {
-	              int T = (int) arreglo[lo];
-	              arreglo[lo] = arreglo[hi];
-	              arreglo[hi] = T;
-	          }
-	      }
-	      if (hi < lo) {
-	          int T = hi;
-	          hi = lo;
-	          lo = T;
-	      }
-	      quick_srt(arreglo, low, lo);
-	      quick_srt(arreglo, lo == low ? lo+1 : lo, n);
-	      long endTime = System.currentTimeMillis();
-	      return startTime - endTime;
-	   }
-	
-
-	 
-	
-		
-	
+		for (int i = 0; i < arreglo.size(); i++) {
+			
+		}
+						
+	}	
 }
-
-
-
-

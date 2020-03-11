@@ -24,113 +24,124 @@ public class MaxColaCP <T  extends Comparable<T>>{
 
 	public T agregar(T elemento)
 	{
-		Nodo nuevo = new Nodo (elemento);
-		if(esVacia() == true)
+		Nodo<T> nuevo = new Nodo<T> (elemento);
+		if(esVacia())
 		{
 			primero = nuevo;
 			ultimo = nuevo;
 			tamano++;
 		}
+		else if (tamano == 1)
+		{
+			if (primero.getActual().compareTo(nuevo.getActual()) < 0)
+			{
+				ultimo = primero;
+				primero = nuevo; 
+				primero.setSiguiente(ultimo);
+				ultimo.setSiguiente(null);
+				tamano++;
+			}
+			else if (primero.getActual().compareTo(nuevo.getActual()) >= 0)
+			{
+				ultimo = nuevo;
+				primero.setSiguiente(nuevo);
+				ultimo.setSiguiente(null);
+				tamano ++;
+			}	
+		}
 		else 
 		{
-			ultimo.setSiguiente(nuevo);
-			ultimo = nuevo;
-			tamano ++;
+			Nodo<T> comparar = primero;
+			boolean x = false;
+			while(!x)
+			{
+				if(primero.getActual().compareTo(nuevo.getActual()) < 0)
+				{
+					nuevo.setSiguiente(primero);
+					primero = nuevo;
+					x = true;
+					tamano++;
+				}
+				else if(comparar.getActual().compareTo(nuevo.getActual()) < 0 )
+				{
+					Nodo<T> anterior = localizarNodoAnterior(comparar);
+					anterior.setSiguiente(nuevo);
+					nuevo.setSiguiente(comparar);
+					x = true;
+					tamano++;
+				}
+				else if (comparar.getSiguiente() == null)
+				{
+					ultimo.setSiguiente(nuevo);
+					ultimo = nuevo;
+					x = true;
+					tamano ++;
+				}
+				comparar = comparar.getSiguiente();
+			}
 		}
-
-		return elemento;
+		return nuevo.getActual();
 	}
-	
 
 	public T sacarMax() 
 	{
-		Nodo<T> max = (Nodo<T>) darMax();
-		try {
-			eliminarNodo(max);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return (T) max;
-	}
-	
-
-	public T darMax()
-	{
-	
-	Nodo<T> max = primero;	
-	if (tamano == 0)
+		Nodo<T> devolver = primero;
+		if(tamano == 0)return null;
+		else if(tamano ==1)
 		{
-			return null;
-		}
-		else if(tamano == 1)
-		{ 
-			return (T)max;
+			tamano --;
+			ultimo = null;
+			primero = null;
 		}
 		else 
 		{
-			while(primero.getSiguiente() != null)
-			{
-				if(primero.getActual().compareTo((T) primero.getSiguiente()) == 1)
-				{
-					max = (Nodo<T>) primero.getActual();
-				}
-				else if(primero.getActual().compareTo((T) primero.getSiguiente()) == -1)
-				{
-					max = (Nodo<T>) primero.getSiguiente();
-				}
-				else {
-				}
-				
-				primero = primero.getSiguiente();
-			}
-			
-			return (T) max;
+			primero = primero.getSiguiente();
+			tamano --;
 		}
+		return devolver.getActual();
 	}
+
+
+	public T darMax()
+	{
+		Nodo<T> max = primero;	
+		return max.getActual();
+	}
+	
 
 	public boolean esVacia()
 	{
 		if(tamano == 0)return true;
 		else return false;
 	}
-	
-	// Métodos localizarNodoAnterior y eliminarNodo fueron tomados y modificados de presentaciones de una sección de APO2.
-	
+
+	// Método localizarNodoAnterior fue tomado y modificado de presentaciones de una sección de APO2.
+
 	public Nodo localizarNodoAnterior(Nodo este)
 	{
-	    Nodo<T> actual = primero;
-	    Nodo<T> anterior = null;
-	    while( actual != null && actual != este)
-	    {
-	        anterior = actual;
-	        actual = actual.getSiguiente(  );
-	    }
-	    if( actual != null )
-	        return anterior;
-	    else
-	        return null;
-	}
-	
-	public void eliminarNodo( Nodo<T> este ) throws Exception 
-	{
-		if( primero == null )
+		Nodo<T> actual = primero;
+		Nodo<T> anterior = null;
+		while( actual != null && actual != este)
 		{
-			throw new Exception("F");
+			anterior = actual;
+			actual = actual.getSiguiente(  );
 		}
-		
-		else if( este == primero.getActual() )
-            primero = primero.getSiguiente(  );
+		if( actual != null )
+			return anterior;
 		else
-		{
-			Nodo<T> anterior = localizarNodoAnterior( este );
-			Nodo<T> es = anterior.getSiguiente();
-		       if( anterior == null )
-		       		throw new Exception( "F2" );
-		            es = es.getSiguiente();
-		 }
-
-
-
+			return null;
 	}
+
+	public Nodo<T> darPrimero() {
+		
+		return primero;
+	}
+
+	public Nodo<T> darUltimo() {
+		
+		return ultimo;
+	}
+
 	
+
 }
