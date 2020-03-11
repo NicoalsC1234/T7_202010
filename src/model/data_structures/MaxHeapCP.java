@@ -1,50 +1,104 @@
 package model.data_structures;
 
-public class MaxHeapCP<T extends Comparable<T>> {
+// Implementaciuón de max heap escalada que encontré en internet
 
-	private int tamano;
+public class MaxHeapCP<T extends Comparable<T>> { 
+	    
+		private T[] Heap; 
+	    private int tamano; 
+	    private int max; 
+	  
+	     
+	    public MaxHeapCP(int maxsize) 
+	    { 
+	        this.max = maxsize; 
+	        this.tamano = 0; 
+	        Heap = (T[]) new Object [this.max + 1]; 
+	        
+	    } 
+	  
+	    
+	    private int padre(int pos) 
+	    { 
+	        return pos / 2; 
+	    } 
+	  
+	    private int hijoIzquierdo(int pos) 
+	    { 
+	        return (2 * pos); 
+	    } 
+	    private int hijoDerecho(int pos) 
+	    { 
+	        return (2 * pos) + 1; 
+	    } 
+	  
 	
-	private Nodo<T> primero;
-	
-	public MaxHeapCP()
-	{
-		primero = null;
-		tamano = 0;
-		
-	}
-	
-	public int darNumElementos()
-	{
-		return tamano;
-	}
-	
-	public void agregar(T elemento)
-	{
-		Nodo<T> nuevo = new Nodo<T> (elemento);
-		if(tamano == 0){
-			primero = nuevo;
-			tamano++;
-		}
-		else {
-			
-		}
-	}
-	
-	public T sacarMax()
-	{
-		if(esVacia())return null;
-		
-	}
-	
-	public T darMax()
-	{
-		return primero.getActual();
-	}
-	
-	public boolean esVacia()
-	{
-		if(tamano == 0)return true;
-		else return false;
-	}
-	
-}
+	    private boolean esHoja(int pos) 
+	    { 
+	        if (pos >= (tamano / 2) && pos <= tamano) { 
+	            return true; 
+	        } 
+	        return false; 
+	    } 
+	  
+	    private void swap(int fpos, int spos) 
+	    { 
+	        int tmp; 
+	        tmp = Heap[fpos]; 
+	        Heap[fpos] = Heap[spos]; 
+	        Heap[spos] = tmp; 
+	    } 
+	  
+	    // A recursive function to max heapify the given 
+	    // subtree. This function assumes that the left and 
+	    // right subtrees are already heapified, we only need 
+	    // to fix the root. 
+	    private void maxHeapify(int pos) 
+	    { 
+	        if (isLeaf(pos)) 
+	            return; 
+	  
+	        if (Heap[pos] < Heap[leftChild(pos)] ||  
+	            Heap[pos] < Heap[rightChild(pos)]) { 
+	  
+	            if (Heap[leftChild(pos)] > Heap[rightChild(pos)]) { 
+	                swap(pos, leftChild(pos)); 
+	                maxHeapify(leftChild(pos)); 
+	            } 
+	            else { 
+	                swap(pos, rightChild(pos)); 
+	                maxHeapify(rightChild(pos)); 
+	            } 
+	        } 
+	    } 
+	  
+	    // Inserts a new element to max heap 
+	    public void insert(int element) 
+	    { 
+	        Heap[++size] = element; 
+	  
+	        // Traverse up and fix violated property 
+	        int current = size; 
+	        while (Heap[current] > Heap[parent(current)]) { 
+	            swap(current, parent(current)); 
+	            current = parent(current); 
+	        } 
+	    } 
+	  
+	    public void print() 
+	    { 
+	        for (int i = 1; i <= size / 2; i++) { 
+	            System.out.print(" PARENT : " + Heap[i] + " LEFT CHILD : " + 
+	                      Heap[2 * i] + " RIGHT CHILD :" + Heap[2 * i + 1]); 
+	            System.out.println(); 
+	        } 
+	    } 
+	  
+	    // Remove an element from max heap 
+	    public int extractMax() 
+	    { 
+	        int popped = Heap[1]; 
+	        Heap[1] = Heap[size--]; 
+	        maxHeapify(1); 
+	        return popped; 
+	    }
