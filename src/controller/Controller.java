@@ -43,7 +43,7 @@ public class Controller <T extends Comparable<T>>{
 	              
 	                    	modelo.cargarDatos();
 	                    	view.printMessage("Se ha creado");
-	                    	int numero = modelo.darTamano();
+	                    	int numero = reader.next().;
 	                    	view.printMessage("El numero de datos leidos es : " + numero);
 	                    	view.printMessage(modelo.darUltimo().toString());
 	                    	view.printMessage(modelo.darPrimero().toString());

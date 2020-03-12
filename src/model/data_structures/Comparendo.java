@@ -1,12 +1,13 @@
 package model.data_structures;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Comparendo implements Comparable<Comparendo> {
 	
 	public int OBJECTID;
 
-	public Date FECHA_HORA;
+	public SimpleDateFormat FECHA_HORA;
 	
 	public String MEDIO_DETE;
 	
@@ -28,7 +29,7 @@ public class Comparendo implements Comparable<Comparendo> {
 		return OBJECTID;
 	}
 
-	public Date getFECHA_HORA() {
+	public SimpleDateFormat getFECHA_HORA() {
 		return FECHA_HORA;
 	}
 
@@ -68,14 +69,9 @@ public class Comparendo implements Comparable<Comparendo> {
 	@Override
 	public int compareTo(Comparendo comparendo) {
 		
-		if(FECHA_HORA.compareTo(comparendo.getFECHA_HORA()) == 0) 
-		{
-			if (OBJECTID > comparendo.getOBJECTID()) 
-				return 1;
-			else
-				return -1;
-		}
-		else return FECHA_HORA.compareTo(comparendo.getFECHA_HORA());
+		if(latitud - comparendo.latitud > 0) return 123456;
+		else if (latitud - comparendo.latitud < 0) return -1456789;
+		else return 0;
 	}
 	
 	@Override

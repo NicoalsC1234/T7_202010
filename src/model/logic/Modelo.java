@@ -16,6 +16,7 @@ import com.sun.corba.se.impl.orbutil.RepositoryIdUtility;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import model.data_structures.Comparendo;
+import model.data_structures.ListaEncadenada;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
 import model.data_structures.Nodo;
@@ -28,57 +29,21 @@ import model.data_structures.Nodo;
 public class Modelo <T> {
 
 	public static String PATH = "./data/comparendos_dei_2018_small.geojson"; 
-	
-	private ArrayList<Comparendo> arreglo;
+
+	public ListaEncadenada<Comparendo> cola;
+
+	public MaxColaCP<Comparendo> colaMax;
+
+	public Modelo(){	
+		cola = new ListaEncadenada<Comparendo>();
+	}
 
 
-	public Modelo()
+	public void cargarDatos() 
 	{
-		maxCola = new MaxColaCP();
-		maxHeap = new MaxHeapCP(0);
-		arreglo = new ArrayList<Comparendo>();
-	}
 
-	public int darNumElementos()
-	{
-		return maxCola.darNumElementos();
-	}
 
-	public void agregar(Comparendo dato)
-	{	
-		maxCola.agregar(dato);
-	}
-
-	public Comparendo darPrimero()
-	{
-		return maxCola.darPrimero().getActual();
-	}
-
-	public Comparendo darUltimo()
-	{
-		return maxCola.darUltimo().getActual();
-	}
-	
-	public Comparendo sacarMax()
-	{
-		return maxCola.sacarMax();
-	}
-	
-	public Comparendo darMax()
-	{
-		return maxCola.darMax();
-	}
-	
-	public boolean esVacia()
-	{
-		return maxCola.esVacia();
-	}
-	
-
-	public void cargarDatos() {
-		
-		
-		if(maxCola.esVacia()){
+		if(cola.esVacia()){
 			JsonReader reader;
 			try {
 				reader = new JsonReader(new FileReader(PATH));
@@ -93,7 +58,9 @@ public class Modelo <T> {
 					c.OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
 
 					String s = e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();	
-					c.FECHA_HORA = parser.parse(s); 
+					SimpleDateFormat dateParser=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+					c.FECHA_HORA = dateParser; 
+					
 
 					c.MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETE").getAsString();
 					c.CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHI").getAsString();
@@ -108,29 +75,46 @@ public class Modelo <T> {
 					c.latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
 							.get(1).getAsDouble();
 
-					arreglo.add(c);
-	
+					cola.agregar(c);	
 				}
-			} catch (FileNotFoundException | ParseException e) {
+			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
 		else
 			System.out.println("---");
 	}
-	
+
+
+
 	public void generarMuestraCola(int n)
 	{
-		MaxColaCP copiaComp = new MaxColaCP();
-		int[] numeros = new int[n];
-		for (int i = 0; i < numeros.length; i++) 
+		Comparendo[] copiaComp = new Comparendo[cola.darLargo()];
+
+		for(int i = 0; i < cola.darLargo(); i++)
 		{
-			numeros[i] = (int) Math.random();
+			copiaComp[i] = cola.eliminar(0);
 		}
-		
-		for (int i = 0; i < arreglo.size(); i++) {
-			
+
+		for (int i = 0; i < n +1; i++) {
+			colaMax.agregar(copiaComp[(int) (Math.random()*10)]);
 		}
-						
-	}	
+	}
+
+	public String[] datosMasAlNorte(int n, String vehiculo)
+	{
+		Comparendo comp = colaMax.darPrimero().getActual();
+		Nodo<T> iterador = (Nodo<T>) colaMax.darPrimero();
+		String[] copiaString = new String[cola.darLargo()];
+		for (int i = 0; i < n; i++) {
+			if(comp.DES_INFRAC.equals(vehiculo)){
+				copiaString[i] = "\n" + colaMax.darPrimero().getActual().toString();
+				iterador = iterador.getSiguiente();
+				comp = (Comparendo) iterador.getActual();
+			}
+		}
+		return copiaString;
+	}
+	
+	
 }
