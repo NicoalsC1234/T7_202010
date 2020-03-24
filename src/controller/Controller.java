@@ -41,15 +41,20 @@ public class Controller <T extends Comparable<T>>{
 
 	                    case 1:
 	              
-	                    	modelo.cargarDatos();
-	                    	view.printMessage("Se ha creado");
-	                    	int numero = reader.next().;
+	                    	modelo.cargarDatosEnSeparate();
+	                    	view.printMessage("Se ha creado la Tabla de Separate Hash");
+	                    	int numero1 = reader.next().;
 	                    	view.printMessage("El numero de datos leidos es : " + numero);
 	                    	view.printMessage(modelo.darUltimo().toString());
 	                    	view.printMessage(modelo.darPrimero().toString());
 	                    case 2:
-	                    	view.printMessage("la duracion es " + modelo.quick_srt(modelo.copiarComparendos(), 0, modelo.darTamano()));
+	                    	modelo.cargarDatosEnLinear();
+	                    	view.printMessage("Se ha creado la Tabla de Linear Hash");
+	                    	int numero2 = reader.next().;
+	                    	view.printMessage("El numero de datos leidos es : " + numero);
+	                    	
 	                    
+	                    	// falta.
 	                } 
 	                
 	                
