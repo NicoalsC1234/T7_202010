@@ -69,10 +69,19 @@ public class Comparendo implements Comparable<Comparendo> {
 	@Override
 	public int compareTo(Comparendo comparendo) {
 		
-		if(latitud - comparendo.latitud > 0) return 123456;
-		else if (latitud - comparendo.latitud < 0) return -1456789;
+		if(OBJECTID - comparendo.OBJECTID > 0) return 123456;
+		else if(OBJECTID - comparendo.OBJECTID < 0) return -1456789;
 		else return 0;
 	}
+	
+	public int hashCode()
+    {
+        int hash = 17;
+        hash = 31 * hash + FECHA_HORA.hashCode();
+        hash = 31 * hash + CLASE_VEHI.hashCode();
+        hash = 31* hash + INFRACCION.hashCode();
+        return hash;
+    }
 	
 	@Override
 	public String toString()
