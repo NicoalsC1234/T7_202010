@@ -23,24 +23,23 @@ import model.data_structures.SeparateChaining;
 public class Modelo {
 
 	public static String PATH = "./data/comparendos_dei_2018_small.geojson"; 
-	
-	public int key;
-	
-	public SeparateChaining<key,Comparendo> separate;
 
-	public LinearProbing<key,Comparendo> linear;
+	
+	public SeparateChaining<Integer,Comparendo> separate;
+
+	public LinearProbing<Integer,Comparendo> linear;
 
 	public Modelo()
 	{
-		
-		
+		separate = new SeparateChaining<Integer,Comparendo>();
+		linear = new  LinearProbing<Integer,Comparendo>();
 	}
 
 	
 	public void cargarDatos() 
 	{
 		
-		if(linear.esVacia() && separate.esVacia() ){
+		if(linear.isEmpty() && separate.isEmpty() ){
 			JsonReader reader;
 			try {
 				reader = new JsonReader(new FileReader(PATH));
@@ -84,6 +83,23 @@ public class Modelo {
 		}
 		else
 			System.out.println("---");
+	}
+	
+	public String darPrimero()
+	{
+		return separate.darPrimero().toString();
+				
+	}
+	
+	public String darUltimo()
+	{
+		return separate.darUltimo().toString();
+				
+	}
+	
+	public void buscarTiemposViaje(Date fecha, String claseV, String infra)
+	{
+		
 	}
 
 

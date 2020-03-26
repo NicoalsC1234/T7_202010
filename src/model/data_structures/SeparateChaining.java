@@ -97,5 +97,23 @@ public class SeparateChaining <Key, Value> {
         }
         return (Iterable<Key>) queue;
     } 
+    
+    public BusquedaSecuencial<Key, Value> darUltimo()
+    {
+    	for(int i = st.length; i < 0; i--)
+    	{
+    		if(!st[i].isEmpty()) return st[i];
+    	}
+    	return null;
+    }
+    
+    public BusquedaSecuencial<Key, Value> darPrimero()
+    {
+    	for(int i = 0; i < st.length; i++)
+    	{
+    		if(!st[i].isEmpty()) return st[i];
+    	}
+    	return null;
+    }
 
 }

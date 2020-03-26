@@ -1,68 +1,71 @@
- package controller;
+package controller;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import model.data_structures.Comparendo;
+import model.data_structures.*;
+
 import model.logic.Modelo;
 import view.View;
 
 public class Controller <T extends Comparable<T>>{
 
 	private Modelo modelo;
-	
+
 	private View view;
-	
+
 	public Controller ()
 	{
 		view = new View();
 		modelo = new Modelo();
 	}
-	
-	 public void run() throws InputMismatchException {
 
-	        try {
+	public void run() throws InputMismatchException {
 
-	            Scanner reader = new Scanner(System.in);
+		try {
 
-	            boolean end = false;
+			Scanner reader = new Scanner(System.in);
 
-
-
-	            while (!end) {
-
-	                view.printMenu();
-
-	                int option = reader.nextInt();
-
-	                switch (option) {
+			boolean end = false;
 
 
 
-	                    case 1:
-	              
-	                    	modelo.cargarDatos();
-	                    	view.printMessage("Se han creado las tablas");
-	                    	int numero = reader.next().;
-	                    	view.printMessage("El numero de datos leidos es : " + numero);
-	                    	
-	                    case 2:
-	                    	
-	                    
-	                    	// falta.
-	                } 
-	                
-	                
-	            }
-	        }
-	                
-	            
-	            catch (InputMismatchException e) {
+			while (!end) {
 
-	            run();
+				view.printMenu();
 
-	        }
+				int option = reader.nextInt();
 
-	    }
+				switch (option) {
 
-	 }
+
+
+				case 1:
+
+					modelo.cargarDatos();
+					view.printMessage("Se han creado las tablas y se han leido los datos");
+					int numero = reader.next().;
+					view.printMessage("El numero de datos leidos es : " + numero);
+					view.printMessage("Primero: " + modelo.darPrimero());
+					view.printMessage("Primero: " + modelo.darUltimo());
+
+				case 2:
+
+
+					// falta.
+				} 
+
+
+			}
+		}
+
+
+		catch (InputMismatchException e) {
+
+			run();
+
+		}
+
+	}
+
+}
