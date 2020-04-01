@@ -42,17 +42,12 @@ public class Controller <T extends Comparable<T>>{
 
 				case 1:
 
-					modelo.cargarDatos();
-					view.printMessage("Se han creado las tablas y se han leido los datos");
-					int numero = reader.next().;
-					view.printMessage("El numero de datos leidos es : " + numero);
-					view.printMessage("Primero: " + modelo.darPrimero());
-					view.printMessage("Primero: " + modelo.darUltimo());
+					
 
 				case 2:
 
 
-					// falta.
+		
 				} 
 
 

@@ -15,8 +15,10 @@ import com.google.gson.stream.JsonReader;
 import com.sun.corba.se.impl.orbutil.RepositoryIdUtility;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
+import model.data_structures.ArbolBalanceado;
 import model.data_structures.Comparendo;
 import model.data_structures.LinearProbing;
+import model.data_structures.MaxColaCP;
 import model.data_structures.SeparateChaining;
 
 
@@ -28,18 +30,26 @@ public class Modelo {
 	public SeparateChaining<Integer,Comparendo> separate;
 
 	public LinearProbing<Integer,Comparendo> linear;
+	
+	public MaxColaCP<Comparendo> colaMax;
+	
+	public ArbolBalanceado<Integer,Comparendo> arbolB;
+	
+	int max;
 
 	public Modelo()
 	{
 		separate = new SeparateChaining<Integer,Comparendo>();
 		linear = new  LinearProbing<Integer,Comparendo>();
+		colaMax = new MaxColaCP<Comparendo>();
+		arbolB = new ArbolBalanceado<Integer,Comparendo>();
 	}
 
 	
 	public void cargarDatos() 
 	{
 		
-		if(linear.isEmpty() && separate.isEmpty() ){
+		if(linear.isEmpty() && separate.isEmpty() && colaMax.esVacia() && arbolB.isEmpty() ){
 			JsonReader reader;
 			try {
 				reader = new JsonReader(new FileReader(PATH));
@@ -74,7 +84,10 @@ public class Modelo {
 					for (int i = 0; i < e2.size(); i++) {
 						linear.put(i,c);
 						separate.put(i,c);
+						arbolB.put(i, c);
 					}
+					
+					colaMax.agregar(c);
 						
 				}
 			} catch (FileNotFoundException e) {

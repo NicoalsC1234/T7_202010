@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 import model.data_structures.MaxColaCP;
-import model.data_structures.MaxHeapCP;
 import model.data_structures.Nodo;
 
 public class TestMaxColaCP {
