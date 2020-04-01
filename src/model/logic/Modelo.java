@@ -88,6 +88,7 @@ public class Modelo {
 					}
 					
 					colaMax.agregar(c);
+					
 						
 				}
 			} catch (FileNotFoundException e) {
