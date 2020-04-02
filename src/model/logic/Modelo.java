@@ -1,3 +1,4 @@
+
 package model.logic;
 
 import java.io.FileNotFoundException;
@@ -26,29 +27,32 @@ public class Modelo {
 
 	public static String PATH = "./data/comparendos_dei_2018_small.geojson"; 
 
-	
+
 	public SeparateChaining<Integer,Comparendo> separate;
 
 	public LinearProbing<Integer,Comparendo> linear;
-	
+
 	public MaxColaCP<Comparendo> colaMax;
-	
+
 	public ArbolBalanceado<Integer,Comparendo> arbolB;
-	
+
+	public int tamano;
+
 	int max;
 
 	public Modelo()
 	{
+		tamano = 0;
 		separate = new SeparateChaining<Integer,Comparendo>();
 		linear = new  LinearProbing<Integer,Comparendo>();
 		colaMax = new MaxColaCP<Comparendo>();
 		arbolB = new ArbolBalanceado<Integer,Comparendo>();
 	}
 
-	
-	public void cargarDatos() 
+
+	public String cargarDatos() 
 	{
-		
+		Comparendo mayor = new Comparendo();
 		if(linear.isEmpty() && separate.isEmpty() && colaMax.esVacia() && arbolB.isEmpty() ){
 			JsonReader reader;
 			try {
@@ -60,13 +64,14 @@ public class Modelo {
 				SimpleDateFormat parser=new SimpleDateFormat("yyyy/MM/dd");
 
 				for(JsonElement e: e2) {
+
 					Comparendo c = new Comparendo();
 					c.OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
 
 					String s = e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();	
 					SimpleDateFormat dateParser=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 					c.FECHA_HORA = dateParser; 
-					
+
 
 					c.MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETE").getAsString();
 					c.CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHI").getAsString();
@@ -80,45 +85,40 @@ public class Modelo {
 
 					c.latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
 							.get(1).getAsDouble();
-					
+
+					if(c.compareTo(mayor) > 0) mayor = c;
+
 					for (int i = 0; i < e2.size(); i++) {
 						linear.put(i,c);
 						separate.put(i,c);
 						arbolB.put(i, c);
+						tamano ++;
+
 					}
-					
+
 					colaMax.agregar(c);
-					
-						
+
+
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
+			return mayor.toString();
 		}
 		else
 			System.out.println("---");
+		return null;
 	}
-	
-	public String darPrimero()
-	{
-		return separate.darPrimero().toString();
-				
-	}
-	
-	public String darUltimo()
-	{
-		return separate.darUltimo().toString();
-				
-	}
-	
+
+
 	public void buscarTiemposViaje(Date fecha, String claseV, String infra)
 	{
-		
+
 	}
 
 
+	public int darTamano() {
+		return separate.size();
+	}
 
-	
-	
-	
 }

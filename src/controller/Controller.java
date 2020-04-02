@@ -41,8 +41,9 @@ public class Controller <T extends Comparable<T>>{
 
 
 				case 1:
-
-					
+					view.printMessage(modelo.cargarDatos());
+					view.printMessage("Se han cargado los datos");
+					view.printMessage("El numero de datos leidos es : " + modelo.darTamano());
 
 				case 2:
 
