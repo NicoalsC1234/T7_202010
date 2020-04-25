@@ -20,6 +20,7 @@ import model.data_structures.ArbolBalanceado;
 import model.data_structures.Comparendo;
 import model.data_structures.LinearProbing;
 import model.data_structures.MaxColaCP;
+import model.data_structures.RedBlackBST;
 import model.data_structures.SeparateChaining;
 
 
@@ -35,6 +36,8 @@ public class Modelo {
 	public MaxColaCP<Comparendo> colaMax;
 
 	public ArbolBalanceado<Integer,Comparendo> arbolB;
+	
+	public RedBlackBST<Integer,Comparendo> arbolRN;
 
 	public int tamano;
 
@@ -47,13 +50,14 @@ public class Modelo {
 		linear = new  LinearProbing<Integer,Comparendo>();
 		colaMax = new MaxColaCP<Comparendo>();
 		arbolB = new ArbolBalanceado<Integer,Comparendo>();
+		arbolRN = new RedBlackBST<Integer,Comparendo>();
 	}
 
 
 	public String cargarDatos() 
 	{
 		Comparendo mayor = new Comparendo();
-		if(linear.isEmpty() && separate.isEmpty() && colaMax.esVacia() && arbolB.isEmpty() ){
+		if(linear.isEmpty() && separate.isEmpty() && colaMax.esVacia() && arbolB.isEmpty() && arbolRN.isEmpty()){
 			JsonReader reader;
 			try {
 				reader = new JsonReader(new FileReader(PATH));
@@ -92,6 +96,7 @@ public class Modelo {
 						linear.put(i,c);
 						separate.put(i,c);
 						arbolB.put(i, c);
+						arbolRN.put(c.OBJECTID, c);
 						tamano ++;
 
 					}
@@ -119,6 +124,40 @@ public class Modelo {
 
 	public int darTamano() {
 		return separate.size();
+	}
+	
+	public int minOBJECTID()
+	{
+		return arbolRN.min();
+	}
+	
+	public int maxOBJECTID()
+	{
+		return arbolRN.max();
+	}
+	
+	public String consultarComparendoID(int objid)
+	{
+		if(arbolRN.contains(objid))
+		{
+			return arbolRN.get(objid).toString();
+		}
+		
+		return "Ese dato no se encuentra en el arbol";
+	}
+	
+	public String consultarComparendoEnRangoID(int objid1, int objid2 )
+	{
+		
+			String mandar = "\n ";
+			int x = objid1;
+			while (x<= objid2)
+			{
+				if(arbolRN.contains(x))
+				mandar = mandar + arbolRN.get(x).toString() + " \n ";
+				x ++;
+			}
+			return mandar;
 	}
 
 }
