@@ -1,51 +1,149 @@
 package model.data_structures;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Comparendo implements Comparable<Comparendo> {
+public class Comparendo implements Comparable<Comparendo>
+{
+	private int objectId;
+	private Date fecha_hora;
+	private String des_infrac;
+	private String medio_dete;
+	private String clase_vehi;
+	private String tipo_servi;
+	private String infraccion;
+	private String localidad;
 
-	public int OBJECTID;
+	private double latitud;
+	private double longitud;
+	private int comparador;
 
-	public SimpleDateFormat FECHA_HORA;
+	public Comparendo(int objeId, Date fecha, String descripcion, String detencion, String claseVeh, String tipoSer, String codInfraccion, String localidadP, double lonP, double latP)
+	{
+		objectId = objeId;
+		fecha_hora = fecha;
+		des_infrac = descripcion;
+		medio_dete = detencion;
+		clase_vehi = claseVeh;
+		tipo_servi = tipoSer;
+		infraccion = codInfraccion;
+		localidad = localidadP;
+		longitud = lonP;
+		latitud = latP;
+		comparador = 0;
 
-	public String MEDIO_DETE;
-
-	public String CLASE_VEHI;
-
-	public String TIPO_SERVI;
-
-	public String INFRACCION;
-
-	public String DES_INFRAC;
-
-	public String LOCALIDAD;
-
-	public double longitud;
-
-	public double latitud;
+	}
+	public String darDatos()
+	{
+		return "\nOBJECTID: " + objectId + "\nFECHA_HORA: " + fecha_hora.toString() + "\nINFRACCION: " + infraccion + "\nCLASE_VEHI: "+ clase_vehi +"\nTIPO_SERVI: " + tipo_servi + "\nLOCALIDAD: " + localidad;
+	}
 
 	@Override
-	public int compareTo(Comparendo comparendo) {
-
-		if(OBJECTID - comparendo.OBJECTID > 0) return 123456;
-		else if(OBJECTID - comparendo.OBJECTID < 0) return -1456789;
+	public int compareTo(Comparendo pComparendo) 
+	{		
+		
+		if(comparador == 1)
+		{
+			if(localidad.equals(pComparendo.darLocalidad())) 
+			{
+				return 0;
+			}
+			else 
+				return localidad.compareTo(pComparendo.darLocalidad());
+		}
+		
+		else if(comparador == 2)
+		{
+			Haversine c = new Haversine();
+			if(c.distance(4.647586, -74.078122, latitud, longitud) < c.distance(4.647586, -74.078122, pComparendo.darLatitud(), pComparendo.darLongitud()) )
+			{
+				return 1;
+			}
+			else if(c.distance(4.647586, -74.078122, latitud, longitud) > c.distance(4.647586, -74.078122, pComparendo.darLatitud(), pComparendo.darLongitud()) )
+			{
+				return -1;
+			}
+			
+			else return 0;	
+			
+		}
+		
 		else return 0;
+		
+		
 	}
-
-	public int hashCode()
+	
+	public void cambiarComparador(int x)
 	{
-		int hash = 17;
-		hash = 31 * hash + FECHA_HORA.hashCode();
-		hash = 31 * hash + CLASE_VEHI.hashCode();
-		hash = 31* hash + INFRACCION.hashCode();
-		return hash;
+		comparador = x;
 	}
 
-	@Override
-	public String toString()
+	public int darId()
 	{
-		return "Los datos del comparendo son " + OBJECTID +", " + FECHA_HORA + ", " + INFRACCION + ", " + CLASE_VEHI  + ", " +  TIPO_SERVI  + ", " + LOCALIDAD;			
+		return  objectId;
 	}
 
+	public Date darFechaHora()
+	{
+		return fecha_hora;
+	}
+
+	public String darClase()
+	{
+		return clase_vehi;
+	}
+
+	public String darTipo()
+	{
+		return tipo_servi;
+	}
+
+	public String darInfraccion()
+	{
+		return infraccion;
+	}
+
+	public String darDescInfra()
+	{
+		return des_infrac;
+	}
+
+	public String darLocalidad()
+	{
+		return localidad;
+	}
+
+	public String darMedioDete()
+	{
+		return medio_dete;
+	}
+
+	public double darLongitud()
+	{
+		return longitud;
+	}
+
+	public double darLatitud()
+	{
+		return latitud;
+	}
+
+	public boolean parametroFecha(Date pFecha)
+	{
+		return fecha_hora.getMonth() == pFecha.getMonth() && fecha_hora.getDate() == pFecha.getDate();
+	}
+
+	public boolean parametroInfraccion(String pInfraccion) 
+	{
+		return infraccion.equals(pInfraccion);
+	}
+
+	public boolean parametroLocalidad(String pLocalidad)
+	{
+		return localidad.equals(pLocalidad);
+	}
+
+	public boolean parametroTipo(String pTipo) 
+	{
+		return tipo_servi.equals(pTipo);
+	}
 }

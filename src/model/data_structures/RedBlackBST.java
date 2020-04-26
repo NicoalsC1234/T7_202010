@@ -1,5 +1,6 @@
 package model.data_structures;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 // Tomado y modificado de https://github.com/kevin-wayne/algs4/blob/master/src/main/java/edu/princeton/cs/algs4/RedBlackBST.java
@@ -211,25 +212,40 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		return balance(h);
 	}
 
-	private boolean check() {
-		return isBST() && isSizeConsistent() && isRankConsistent() && is23() && isBalanced();
-	}
 	
-	public Iterable<Key> keys() {
-		if (isEmpty()) return new Queue<Key>();
+	
+	public Iterator<Key> keys() {
+		if (isEmpty()) return new Queue<Key>().iterator();
 		return keysInRange(min(), max());
 	}
 	
 
-	public Iterable<Key> keysInRange(Key lo, Key hi) {
+	public Iterator<Key> keysInRange(Key lo, Key hi) {
 		if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
 		if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
 
 		Queue<Key> queue = new Queue<Key>();
 		keys(root, queue, lo, hi);
-		return queue;
+		return queue.iterator();
 	} 
+	
+	public Iterator<Value> valueInRange(Key lo, Key hi)
+	{
+		Queue<Value> queue = new Queue<Value>();
+		values(root, queue, lo, hi);
+		return queue.iterator();
+	}
 
+	private void values(Node x, Queue<Value> queue, Key lo, Key hi) { 
+		if (x == null) return; 
+		int cmplo = lo.compareTo(x.key); 
+		int cmphi = hi.compareTo(x.key); 
+		if (cmplo < 0) values(x.left, queue, lo, hi); 
+		if (cmplo <= 0 && cmphi >= 0) queue.enqueue(x.val);; 
+		if (cmphi > 0) values(x.right, queue, lo, hi); 
+	}
+	
+	
 	private void keys(Node x, Queue<Key> queue, Key lo, Key hi) { 
 		if (x == null) return; 
 		int cmplo = lo.compareTo(x.key); 
@@ -267,7 +283,10 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		h.right.color = !h.right.color;
 	}
 
-
+	
+	
+	
+	
 	private Node moveRedLeft(Node h) {
 
 		flipColors(h);
@@ -394,13 +413,6 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		return isSizeConsistent(x.left) && isSizeConsistent(x.right);
 	} 
 
-	private boolean isRankConsistent() {
-		for (int i = 0; i < size(); i++)
-			if (i != rank(select(i))) return false;
-		for (Key key : keys())
-			if (key.compareTo(select(rank(key))) != 0) return false;
-		return true;
-	}
 
 	private boolean is23() { return is23(root); }
 	private boolean is23(Node x) {
