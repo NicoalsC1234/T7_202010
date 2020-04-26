@@ -240,6 +240,23 @@ public class Modelo {
 		}
 		return end;
 	}
+	
+	//1C
+	public Queue<Comparendo> req1C(int D)
+	{
+		
+		try {
+			SimpleDateFormat parser1 = new SimpleDateFormat("yyyy-MM-dd");
+			Date fecha1 = parser1.parse("2018-01-01");
+			SimpleDateFormat parser2 = new SimpleDateFormat("yyyy-MM-dd");
+			
+			Date fecha2 = fecha1.setDate(fecha1.getDate( ) + 1);
+			
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
+	}
 
 
 
