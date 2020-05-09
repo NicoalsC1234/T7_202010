@@ -2,7 +2,7 @@ package model.data_structures;
 
 import java.util.ArrayList;
 
-import algs4.src.main.java.edu.princeton.cs.algs4.*;
+import algs4.*;
 
 
 public class MiGrafo<K, V> {
