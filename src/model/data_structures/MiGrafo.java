@@ -1,4 +1,4 @@
-package model.data_structures;
+	package model.data_structures;
 
 import java.util.ArrayList;
 
@@ -19,6 +19,16 @@ public class MiGrafo<K, V> {
 		llaveAEntero = new SeparateChainingHashST<K, Integer>();
 		llaveAInfoVertex = new SeparateChainingHashST<K, V>();
 		enteroALlave = new SeparateChainingHashST<Integer, K>();
+	}
+	
+	public int V()
+	{
+		return grafo.V();
+	}
+	
+	public int E()
+	{
+		return grafo.E();
 	}
 	
 	public void addEdge(K from, K to, double peso) {
@@ -43,6 +53,11 @@ public class MiGrafo<K, V> {
 	public V getInfoVertex(K key) {
 		return llaveAInfoVertex.get(key);
 	}
+	
+	public void setInfoVertex()
+			{
+		
+			}
 	
 	public void addVertex(K key, V info) {
 		llaveAInfoVertex.put(key, info);

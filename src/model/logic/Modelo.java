@@ -63,12 +63,6 @@ public class Modelo {
 				String EPOCOD_SITIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOCOD_SITIO").getAsString();
 				double EPOLATITUD = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOLATITUD").getAsDouble();
 				double EPOLONGITU = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOLONGITU").getAsDouble();
-				String EPOSERVICIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOSERVICIO").getAsString();
-				String EPOHORARIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOHORARIO").getAsString();
-				String EPOTELEFON = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOTELEFON").getAsString();
-				String EPOCELECTR = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOCELECTR").getAsString();
-				String EPOCONTACT = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOCONTACT").getAsString();
-				String EPOPWEB = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOPWEB").getAsString();
 				String EPOIUUPLAN = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOIUUPLAN").getAsString();
 				String EPOIUSCATA = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOIUSCATA").getAsString();
 				String EPOIULOCAL = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOIULOCAL").getAsString();
