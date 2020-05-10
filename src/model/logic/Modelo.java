@@ -1,7 +1,9 @@
 package model.logic;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,15 +20,17 @@ import model.data_structures.*;
 
 public class Modelo {
 
-	public static String PATH = "./data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public static String PATH = "./data/estacionpolicia.geojson";
+	
+	public static String PATHvertices = "./data/bogota_vertices.txt";
+	
+	public static String PATHarcos = "./data/bogota_arcos.txt";
 
 	public Queue<Comparendo> cola;
-
 	
+	public MiGrafo<Integer, Lugar> grafito;
 
-	public int tamano;
 
-	int max;
 
 	public Modelo()
 	{
@@ -43,9 +47,6 @@ public class Modelo {
 			reader = new JsonReader(new FileReader(PATH));
 			JsonElement elem = JsonParser.parseReader(reader);
 			JsonArray e2 = elem.getAsJsonObject().get("features").getAsJsonArray();
-
-
-			SimpleDateFormat parser=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 			for(JsonElement e: e2) 
 			{
@@ -73,18 +74,88 @@ public class Modelo {
 				String EPOIDENTIF = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOIDENTIF").getAsString();
 				double EPOFECHA_C = e.getAsJsonObject().get("properties").getAsJsonObject().get("EPOFECHA_C").getAsDouble();
 				
-				Comparendo c = new Comparendo(OBJECTID);
-				cola.enqueue(c);
+		
 				
 
 			}
 		} 
-		catch (FileNotFoundException | ParseException e) 
+		catch (FileNotFoundException e) 
 		{
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 		return "\nCarga completa \nEl número total de comparendos es: "+ cola.size() +"\n\nEl comparendo con mayor OBJECTID es: \n";
 	}
+	
+	
+	public void cargaVertices() 
+	{
+		
+		 
+		try {
+			FileReader reader;
+			reader = new FileReader(PATHvertices);
+		
+         BufferedReader bufferedReader = new BufferedReader(reader);
+         Queue<String> vertices = new Queue<String>();
+         String line = "";
+         while ((line = bufferedReader.readLine()) != null) {
+             String datos = line;
+             vertices.enqueue(datos);
+             }
+         grafito = new MiGrafo<>(vertices.size());
+         while (vertices.size() != 0) {
+        	 String[] completo = vertices.dequeue().split(",");
+             int id = Integer.parseInt(completo[0]); 
+             double latitud = Double.parseDouble(completo[1]);
+             double longitud = Double.parseDouble(completo[2]);
+             Lugar lugar = new Lugar(latitud, longitud);
+             grafito.addVertex(id, lugar);
+             
+		}
+         
+         reader.close();
+         
+         
+         
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	public void cargarArcos()
+    {
+         try {
+                FileReader reader = new FileReader(PATHarcos);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    String[] datos = line.split(" ");
+                   //sexo 
+                    int primero = Integer.parseInt(datos[0]);
+                    double startLat = grafito.getInfoVertex(primero).getLatitud();
+					double startLong = grafito.getInfoVertex(primero).getLongitud();
+                    for (int i = 1; i <= datos.length; i++) {
+						
+						int segundo = Integer.parseInt(datos[i]);
+						double endLat = grafito.getInfoVertex(primero).getLatitud();
+						double endLong = grafito.getInfoVertex(segundo).getLongitud();
+						Haversine peso = new Haversine();
+						grafito.addEdge(primero, segundo, peso.distance(startLat, startLong, endLat, endLong));
+					}
+                }
+                reader.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+	
+	
+	
 	
 }

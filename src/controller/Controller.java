@@ -42,16 +42,11 @@ public class Controller {
 			int option = lector.nextInt();
 			switch(option)
 			{
-			case 0 :
-				view.printMessage("--------- \nCarga de datos \nCargando comparendos...");
-				modelo = new Modelo( );
-				long startTimeCarga = System.currentTimeMillis();
-				view.printMessage(modelo.agregar() + "\n---------");
-				long endTimeCarga = System.currentTimeMillis();
-				long durationCarga = endTimeCarga - startTimeCarga;
-				view.printMessage("Tiempo de carga: " + durationCarga + " milisegundos");
-				view.printMessage("Proceso terminado");
-				break;
+			
+			case 0:
+				int vertices = modelo.cargaVertices();
+				view.printMessage("" + vertices);
+				 break; 
 
 			
 			
