@@ -6,6 +6,8 @@ public class Lugar {
 	
 	private double longitud;
 	
+	private boolean marca;
+	
 	
 	public Lugar(double lat, double lon)
 	{
@@ -33,5 +35,8 @@ public class Lugar {
 		this.longitud = longitud;
 	}
 	
-	
+	public void desmarcar()
+	{
+		marca = false;
+	}
 }

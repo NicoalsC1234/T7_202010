@@ -1,7 +1,6 @@
 package model.data_structures;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import algs4.*;
 
@@ -11,25 +10,15 @@ public class MiGrafo<K, V> {
 	private EdgeWeightedGraph grafo;
 	private SeparateChainingHashST<K, Integer> llaveAEntero;
 	private SeparateChainingHashST<Integer, K> enteroALlave;
-	private SeparateChainingHashST<K, Vertice<K, V>> llaveAInfoVertex;
+	private SeparateChainingHashST<K, V> llaveAInfoVertex;
 
 	private int V = 0;
 
-	public MiGrafo(int tamano) {
-		grafo = new EdgeWeightedGraph(tamano);
+	public MiGrafo(int tamaNo) {
+		grafo = new EdgeWeightedGraph(tamaNo);
 		llaveAEntero = new SeparateChainingHashST<K, Integer>();
-		llaveAInfoVertex = new SeparateChainingHashST<K, Vertice<K,V>>();
+		llaveAInfoVertex = new SeparateChainingHashST<K, V>();
 		enteroALlave = new SeparateChainingHashST<Integer, K>();
-	}
-
-	public int V()
-	{
-		return grafo.V();
-	}
-
-	public int E()
-	{
-		return grafo.E();
 	}
 
 	public void addEdge(K from, K to, double peso) {
@@ -51,24 +40,11 @@ public class MiGrafo<K, V> {
 		grafo.addEdge(new Edge(fromEntero, toEntero, peso));
 	}
 
-	public Vertice getInfoVertex(K key) {
+	public V getInfoVertex(K key) {
 		return llaveAInfoVertex.get(key);
 	}
 
-	public void setInfoVertex(K key, Vertice info)
-	{
-		llaveAInfoVertex.put(key, info);
-	}
-	
-	public void uncheck()
-	{
-		Iterable<K> iter = llaveAInfoVertex.keys();
-		for (K k : iter) {
-			llaveAInfoVertex.get(k).desmarcador();
-		}
-	}
-
-	public void addVertex(K key, Vertice info) {
+	public void addVertex(K key, V info) {
 		llaveAInfoVertex.put(key, info);
 		if(!llaveAEntero.contains(key)) {
 			llaveAEntero.put(key, V);
@@ -86,6 +62,7 @@ public class MiGrafo<K, V> {
 				lista.add(enteroALlave.get(v));
 			}
 		}
+
 		return lista;
 	}
 
@@ -101,6 +78,23 @@ public class MiGrafo<K, V> {
 		return resultado;
 	}
 
+	public int V()
+	{
+		return grafo.V();
+	}
 
+	public int E()
+	{
+		return grafo.E();
+	}
 
+	public void setInfoVertex(K key, V info)
+	{
+		llaveAInfoVertex.put(key, info);
+	}
+	
+	public boolean esta(K key)
+	{
+		return llaveAInfoVertex.contains(key);
+	}
 }

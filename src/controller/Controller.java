@@ -34,8 +34,6 @@ public class Controller {
 	{
 		Scanner lector = new Scanner(System.in);
 		boolean fin = false;
-		String dato = "";
-		String respuesta = "";
 		while( !fin ){
 			view.printMenu();
 
@@ -44,9 +42,11 @@ public class Controller {
 			{
 			
 			case 0:
-				int vertices = modelo.cargaVertices();
-				view.printMessage("" + vertices);
-				 break; 
+				modelo.cargaVertices();
+				view.printMessage("" + modelo.darNumeroDeVertices());
+				modelo.cargarArcos();
+				view.printMessage("" + modelo.darNumeroDeArcos());
+				break; 
 
 			
 			
