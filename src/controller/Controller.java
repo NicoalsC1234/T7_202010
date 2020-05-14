@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import javax.management.Query;
 
-import model.data_structures.Comparendo;
+
 import model.data_structures.Queue;
 import model.logic.Modelo;
 import view.View;
